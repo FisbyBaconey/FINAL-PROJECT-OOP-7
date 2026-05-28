@@ -1,4 +1,5 @@
 package ThreadHub.view;
+
 import ThreadHub.controller.DataStore;
 import ThreadHub.model.*;
 import javafx.geometry.*;
