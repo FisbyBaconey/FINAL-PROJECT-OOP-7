@@ -1,7 +1,7 @@
 package ThreadHub.view;
 
-import app.controller.DataStore;
-import app.model.*;
+import ThreadHub.controller.DataStore;
+import ThreadHub.model.*;
 import javafx.geometry.*;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
