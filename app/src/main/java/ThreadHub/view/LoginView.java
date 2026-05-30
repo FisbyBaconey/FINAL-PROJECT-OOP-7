@@ -57,34 +57,18 @@ public class LoginView {
     Label usernameLabel = new Label("Username");
     usernameLabel.setTextFill(Color.web(StyleKit.TEXT_MUTED));
     usernameLabel.setFont(Font.font(StyleKit.FONT_FAMILY, 13));
-
+    
     TextField usernameField = new TextField();
     usernameField.setPromptText("Masukkan username");
-    usernameField.setStyle(
-      "-fx-background-color: " + StyleKit.CARD_BG + ";" +
-      "-fx-text-fill: " + StyleKit.TEXT_PRIMARY + ";" +
-      "-fx-border-color: " + StyleKit.BORDER + ";" +
-      "-fx-border-radius: 8;" +
-      "-fx-background-radius: 8;" +
-      "-fx-padding: 10 14;" +
-      "-fx-font-size: 14px;"
-    );
-        
+    styleTextField(usernameField);
+
     Label passwordLabel = new Label("Password");
     passwordLabel.setTextFill(Color.web(StyleKit.TEXT_MUTED));
     passwordLabel.setFont(Font.font(StyleKit.FONT_FAMILY, 13));
 
     PasswordField passwordField = new PasswordField();
     passwordField.setPromptText("Masukkan password");
-    passwordField.setStyle(
-      "-fx-background-color: " + StyleKit.CARD_BG + ";" +
-      "-fx-text-fill: " + StyleKit.TEXT_PRIMARY + ";" +
-      "-fx-border-color: " + StyleKit.BORDER + ";" +
-      "-fx-border-radius: 8;" +
-      "-fx-background-radius: 8;" +
-      "-fx-padding: 10 14;" +
-      "-fx-font-size: 14px;"
-    );
+    styleTextField(passwordField);
 
     errorLabel = new Label("");
     errorLabel.setTextFill(Color.web(StyleKit.ACCENT));
@@ -150,7 +134,114 @@ public class LoginView {
       new ThreadHub.buyer.BuyerDashboardView(stage, (ThreadHub.model.Buyer) user).show();
     }
   }
-    
+
+  private void showRegisterDialog() {
+    Stage dialog = new Stage();
+    dialog.setTitle("Daftar Akun Baru");
+    dialog.initOwner(stage);
+
+    VBox form = new VBox(14);
+    form.setPadding(new Insets(30));
+    form.setPrefWidth(350);
+    form.setStyle("-fx-background-color: " + StyleKit.DARK_BG + ";");
+
+    Label title = StyleKit.titleLabel("Buat Akun Pembeli", 20);
+
+    TextField tfNama = new TextField();
+    tfNama.setPromptText("Nama Lengkap (Contoh: Budi Santoso)");
+    styleTextField(tfNama);
+
+    TextField tfUsername = new TextField();
+    tfUsername.setPromptText("Username (tanpa spasi)");
+    styleTextField(tfUsername);
+
+    PasswordField pfPassword = new PasswordField();
+    pfPassword.setPromptText("Password");
+    styleTextField(pfPassword);
+
+    Label errLabel = new Label("");
+    errLabel.setTextFill(Color.web(StyleKit.ACCENT));
+    errLabel.setFont(Font.font(StyleKit.FONT_FAMILY, 12));
+
+    Button btnDaftar = StyleKit.primaryButton("Daftar Sekarang");
+    btnDaftar.setMaxWidth(Double.MAX_VALUE);
+
+    btnDaftar.setOnAction(e -> {
+      String nama     = tfNama.getText().trim();
+      String username = tfUsername.getText().trim();
+      String password = pfPassword.getText().trim();
+
+      if (nama.isEmpty() || username.isEmpty() || password.isEmpty()) {
+        errLabel.setText("Semua kolom wajib diisi.");
+        return;
+      }
+
+      if (username.contains(" ")) {
+        errLabel.setText("Username tidak boleh mengandung spasi.");
+        return;
+      }
+
+      DataStore ds = DataStore.getInstance();
+
+      boolean sudahAda = ds.getAllUsers().stream()
+          .anyMatch(u -> u.getUsername().equalsIgnoreCase(username));
+
+      if (sudahAda) {
+        errLabel.setText("Username sudah terpakai, pilih yang lain.");
+        return;
+      }
+
+      int newId = ds.generateUserId();
+      Buyer pembeliBaru = new Buyer(newId, username, password, nama);
+      ds.tambahUser(pembeliBaru);
+
+      Alert alert = new Alert(Alert.AlertType.INFORMATION);
+      alert.setTitle("Pendaftaran Berhasil");
+      alert.setHeaderText(null);
+      alert.setContentText("Akun berhasil dibuat! Silakan login menggunakan username dan password Anda.");
+      alert.showAndWait();
+
+      dialog.close();
+    });
+
+    Label lblNama = new Label("Nama Lengkap");
+    lblNama.setTextFill(Color.web(StyleKit.TEXT_MUTED));
+    lblNama.setFont(Font.font(12));
+
+    Label lblUsername = new Label("Username");
+    lblUsername.setTextFill(Color.web(StyleKit.TEXT_MUTED));
+    lblUsername.setFont(Font.font(12));
+
+    Label lblPassword = new Label("Password");
+    lblPassword.setTextFill(Color.web(StyleKit.TEXT_MUTED));
+    lblPassword.setFont(Font.font(12));
+
+    form.getChildren().addAll(
+      title, StyleKit.hSeparator(),
+      lblNama, tfNama,
+      lblUsername, tfUsername,
+      lblPassword, pfPassword,
+      errLabel, btnDaftar
+    );
+
+    dialog.setScene(new Scene(form));
+    dialog.setResizable(false);
+    dialog.showAndWait();
+  }
+
+  private void styleTextField(TextField tf) {
+    String baseStyle =
+      "-fx-background-color: " + StyleKit.CARD_BG + ";" +
+      "-fx-text-fill: " + StyleKit.TEXT_PRIMARY + ";" +
+      "-fx-prompt-text-fill: " + StyleKit.TEXT_MUTED + ";" +
+      "-fx-border-radius: 8;" +
+      "-fx-background-radius: 8;" +
+      "-fx-padding: 10 14;" +
+      "-fx-font-size: 14px;";
+
+    tf.setStyle(baseStyle + "-fx-border-color: " + StyleKit.BORDER + ";");
+  }
+
   public void show() {
     stage.setTitle("ThreadHub — Login");
     stage.setScene(new Scene(buildLayout(), 840, 560));
