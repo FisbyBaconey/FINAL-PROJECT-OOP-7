@@ -62,4 +62,19 @@ public class StyleKit {
     );
     return btn;
   }
+  public static Button sidebarButton(String text) {
+    Button btn = new Button(text);
+    btn.setMaxWidth(Double.MAX_VALUE);
+      btn.setStyle(
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+        "-fx-font-size: 14px;" +
+        "-fx-padding: 12 20;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;" +
+        "-fx-background-radius: 8;"
+      );
+    return btn;
+  }
+
 }
