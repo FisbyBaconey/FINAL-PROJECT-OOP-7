@@ -6,7 +6,6 @@ import java.util.List;
 import java.util.Optional;
 
 public class KeranjangController {
-
     private final List<ItemKeranjang> items = new ArrayList<>();
     private final Buyer buyer;
 
@@ -19,6 +18,7 @@ public class KeranjangController {
         Optional<ItemKeranjang> existing = items.stream()
                 .filter(i -> i.getProduk().getId() == produk.getId())
                 .findFirst();
+
         if (existing.isPresent()) {
             int baru = existing.get().getJumlah() + jumlah;
             existing.get().setJumlah(Math.min(baru, produk.getStok()));
@@ -48,29 +48,28 @@ public class KeranjangController {
     }
 
     public String getTotalFormatted() {
-        return String.format("Rp %,.0f", getTotal());
+        return String.format("Rp %..0f", getTotal());
     }
 
-    /**
-     * Checkout: kurangi stok semua produk dan buat transaksi.
-     * @return Transaksi yang berhasil dibuat, atau null jika keranjang kosong/stok tidak cukup.
-     */
     public Transaksi checkout() {
         if (isEmpty()) return null;
 
-        // Validasi stok
         for (ItemKeranjang item : items) {
             if (item.getProduk().getStok() < item.getJumlah()) return null;
         }
 
-        // Kurangi stok
         for (ItemKeranjang item : items) {
             Produk p = item.getProduk();
             p.setStok(p.getStok() - item.getJumlah());
         }
 
-        Transaksi trx = new Transaksi(buyer, items);
+        int newId = DataStore.getInstance().generateTransaksiId();
+        Transaksi trx = new Transaksi(newId, buyer, items);
+        
         DataStore.getInstance().tambahTransaksi(trx);
+        
+        DataStore.getInstance().simpanDataProduk(); 
+        
         kosongkanKeranjang();
         return trx;
     }

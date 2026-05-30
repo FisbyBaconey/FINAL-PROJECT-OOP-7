@@ -23,7 +23,7 @@ public class DataStore {
         muatDataUser();      
         muatDataProduk(); 
         muatDataTransaksi(); 
-        muatDataOutfit(); // TAMBAHAN
+        muatDataOutfit();
     }
 
     public static DataStore getInstance() {
@@ -33,7 +33,7 @@ public class DataStore {
         return instance;
     }
 
-    // ─── User ────────────────────────────────────────────────────────────────
+    //User
 
     @SuppressWarnings("unchecked")
     private void muatDataUser() {
@@ -88,4 +88,73 @@ public class DataStore {
     public int generateUserId() {
         return users.stream().mapToInt(User::getId).max().orElse(0) + 1;
     }
+
+    //Produk
+    @SuppressWarnings("unchecked")
+    private void muatDataProduk() {
+        File file = new File(FILE_PRODUK);
+        if (file.exists()) {
+            try (ObjectInputStream ois = new ObjectInputStream(new FileInputStream(file))) {
+                List<Produk> dataTersimpan = (List<Produk>) ois.readObject();
+                produkList.addAll(dataTersimpan);
+            } catch (Exception e) {
+                initSampleProduk();
+                simpanDataProduk();
+            }
+        } else {
+            initSampleProduk();
+            simpanDataProduk();
+        }
+    }
+
+    public void simpanDataProduk() {
+        try (ObjectOutputStream oos = new ObjectOutputStream(new FileOutputStream(FILE_PRODUK))) {
+            oos.writeObject(produkList);
+        } catch (Exception e) {
+            System.out.println("Gagal menyimpan data produk: " + e.getMessage());
+        }
+    }
+
+    private void initSampleProduk() {
+        produkList.add(new Produk(1, "Kaos Polos Premium", "Kaos bahan cotton combed 30s.", "Kaos", 89_000, 50, "M", "Putih", "PRIA", null));
+        produkList.add(new Produk(2, "Kemeja Flanel Kotak", "Kemeja casual.", "Kemeja", 175_000, 30, "L", "Merah", "PRIA", null));
+        produkList.add(new Produk(3, "Blouse Floral Elegan", "Blouse cantik.", "Kemeja", 150_000, 25, "M", "Navy", "WANITA", null));
+        produkList.add(new Produk(4, "Rok Midi Plisket", "Rok premium.", "Rok", 120_000, 15, "All Size", "Hitam", "WANITA", null));
+        produkList.add(new Produk(5, "Kaos Karakter Superhero", "Kaos anak.", "Kaos", 65_000, 20, "S", "Biru", "ANAK-ANAK", null));
+        produkList.add(new Produk(6, "Polo Shirt Pique", "Polo formal.", "Kaos Polo", 145_000, 40, "M", "Dongker", "PRIA", null));
+        produkList.add(new Produk(7, "Sepatu Sneakers Canvas", "Sepatu kasual.", "Sepatu", 285_000, 18, "40", "Putih", "WANITA", null));
+        produkList.add(new Produk(8, "Topi Baseball Anak", "Topi pelindung.", "Topi", 45_000, 22, "All Size", "Merah", "ANAK-ANAK", null));
+    }
+
+    public List<Produk> getAllProduk() { return produkList; }
+
+    public List<Produk> cariProduk(String keyword) {
+        String kw = keyword.toLowerCase();
+        return produkList.stream()
+                .filter(p -> p.getNama().toLowerCase().contains(kw)
+                          || p.getKategori().toLowerCase().contains(kw)
+                          || p.getWarna().toLowerCase().contains(kw)
+                          || p.getGender().toLowerCase().contains(kw))
+                .toList();
+    }
+
+    public Produk getProdukById(int id) {
+        return produkList.stream().filter(p -> p.getId() == id).findFirst().orElse(null);
+    }
+
+    public void tambahProduk(Produk p) {
+        produkList.add(p);
+        simpanDataProduk(); 
+    }
+
+    public void hapusProduk(int id) {
+        produkList.removeIf(p -> p.getId() == id);
+        simpanDataProduk(); 
+    }
+
+    public int generateProdukId() {
+        return produkList.stream().mapToInt(Produk::getId).max().orElse(0) + 1;
+    }
+
+
 }
