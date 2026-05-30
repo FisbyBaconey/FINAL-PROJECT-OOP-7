@@ -1,6 +1,11 @@
 package ThreadHub.view;
 
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.
+FontWeight;
 
 public class StyleKit {
   public static final String DARK_BG      = "#1a1a2e";
@@ -92,7 +97,12 @@ public class StyleKit {
         "-fx-cursor: hand;" +
         "-fx-background-radius: 8;")
       );
-    return btn;
+      return btn;
   }
-
+  public static Label titleLabel(String text, int size) {
+    Label lbl = new Label(text);
+    lbl.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, size));
+    lbl.setTextFill(Color.web(TEXT_PRIMARY));
+    return lbl;
+  }
 }
