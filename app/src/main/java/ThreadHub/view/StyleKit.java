@@ -1,12 +1,6 @@
 package ThreadHub.view;
-import javafx.geometry.Insets;
+
 import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.layout.*;
-import javafx.scene.layout.Region;
-import javafx.scene.paint.Color;
-import javafx.scene.text.Font;
-import javafx.scene.text.FontWeight;
 
 public class StyleKit {
   public static final String DARK_BG      = "#1a1a2e";
@@ -53,87 +47,5 @@ public class StyleKit {
       "-fx-cursor: hand;"
     ));
     return btn;
-  }
-
-  public static Button outlineButton(String text) {
-    Button btn = new Button(text);
-    btn.setStyle(
-      "-fx-background-color: transparent;" +
-      "-fx-text-fill: " + ACCENT + ";" +
-      "-fx-border-color: " + ACCENT + ";" +
-      "-fx-border-radius: 8;" +
-      "-fx-background-radius: 8;" +
-      "-fx-font-size: 13px;" +
-      "-fx-padding: 9 22;" +
-      "-fx-cursor: hand;"
-    );
-    return btn;
-  }
-
-  public static Button sidebarButton(String text) {
-    Button btn = new Button(text);
-    btn.setMaxWidth(Double.MAX_VALUE);
-    btn.setStyle(
-      "-fx-background-color: transparent;" +
-      "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-      "-fx-font-size: 14px;" +
-      "-fx-padding: 12 20;" +
-      "-fx-alignment: CENTER_LEFT;" +
-      "-fx-cursor: hand;" +
-      "-fx-background-radius: 8;"
-    );
-    btn.setOnMouseEntered(e -> btn.setStyle(
-      "-fx-background-color: rgba(233,69,96,0.15);" +
-      "-fx-text-fill: " + ACCENT + ";" +
-      "-fx-font-size: 14px;" +
-      "-fx-padding: 12 20;" +
-      "-fx-alignment: CENTER_LEFT;" +
-      "-fx-cursor: hand;" +
-      "-fx-background-radius: 8;"
-    ));
-    btn.setOnMouseExited(e -> btn.setStyle(
-      "-fx-background-color: transparent;" +
-      "-fx-text-fill: " + TEXT_PRIMARY + ";" +
-      "-fx-font-size: 14px;" +
-      "-fx-padding: 12 20;" +
-      "-fx-alignment: CENTER_LEFT;" +
-      "-fx-cursor: hand;" +
-      "-fx-background-radius: 8;"
-    ));
-    return btn;
-  }
-
-  public static Label titleLabel(String text, int size) {
-    Label lbl = new Label(text);
-    lbl.setFont(Font.font(FONT_FAMILY, FontWeight.BOLD, size));
-    lbl.setTextFill(Color.web(TEXT_PRIMARY));
-    return lbl;
-  }
-
-  public static Label mutedLabel(String text) {
-    Label lbl = new Label(text);
-    lbl.setFont(Font.font(FONT_FAMILY, 12));
-    lbl.setTextFill(Color.web(TEXT_MUTED));
-    return lbl;
-  }
-
-  public static VBox card(double padding) {
-    VBox box = new VBox(10);
-    box.setPadding(new Insets(padding));
-    box.setStyle(
-      "-fx-background-color: " + CARD_BG + ";" +
-      "-fx-background-radius: " + RADIUS + ";" +
-      "-fx-border-color: " + BORDER + ";" +
-      "-fx-border-radius: " + RADIUS + ";" +
-      "-fx-border-width: 1;"
-    );
-    return box;
-  }
-
-  public static Region hSeparator() {
-    Region sep = new Region();
-    sep.setPrefHeight(1);
-    sep.setStyle("-fx-background-color: " + BORDER + ";");
-    return sep;
   }
 }
