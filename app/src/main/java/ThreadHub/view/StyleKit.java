@@ -74,6 +74,24 @@ public class StyleKit {
         "-fx-cursor: hand;" +
         "-fx-background-radius: 8;"
       );
+      btn.setOnMouseEntered(e -> btn.setStyle(
+        "-fx-background-color: rgba(233,69,96,0.15);" +
+        "-fx-text-fill: " + ACCENT + ";" +
+        "-fx-font-size: 14px;" +
+        "-fx-padding: 12 20;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;" +
+        "-fx-background-radius: 8;")
+      );
+      btn.setOnMouseExited(e -> btn.setStyle(
+        "-fx-background-color: transparent;" +
+        "-fx-text-fill: " + TEXT_PRIMARY + ";" +
+        "-fx-font-size: 14px;" +
+        "-fx-padding: 12 20;" +
+        "-fx-alignment: CENTER_LEFT;" +
+        "-fx-cursor: hand;" +
+        "-fx-background-radius: 8;")
+      );
     return btn;
   }
 
