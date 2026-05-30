@@ -48,4 +48,18 @@ public class StyleKit {
     ));
     return btn;
   }
+  public static Button outlineButton(String text) {
+    Button btn = new Button(text);
+    btn.setStyle(
+      "-fx-background-color: transparent;" +
+      "-fx-text-fill: " + ACCENT + ";" +
+      "-fx-border-color: " + ACCENT + ";" +
+      "-fx-border-radius: 8;" +
+      "-fx-background-radius: 8;" +
+      "-fx-font-size: 13px;" +
+      "-fx-padding: 9 22;" +
+      "-fx-cursor: hand;"
+    );
+    return btn;
+  }
 }
